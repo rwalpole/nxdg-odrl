@@ -1,0 +1,80 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix premis: <http://www.loc.gov/premis/rdf/v3/> .
+@prefix schema: <https://schema.org/> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix cat:    <http://cat.nationalarchives.gov.uk/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix odrl:   <http://www.w3.org/ns/odrl/2/> .
+@prefix nat:  <http://www.nationalarchives.gov.uk/> .
+
+cat:ADM.2021.2NW6VY.P.1
+    a                 premis:IntellectualEntity ;
+    dct:identifier    "ADM.2021.2NW6VY.P.1" ;
+    schema:identifier [ a                 schema:identifier ;
+                        schema:propertyID <http://www.nationalarchives.gov.uk/ont.ccr> ;
+                        schema:value      "ADM 53/121006" ] ;
+    dct:abstract      "<scopecontent><p>BIRMINGHAM</p></scopecontent>"^^rdf:XMLLiteral ;
+    dct:accessRights  [ a              dct:RightsStatement ;
+                        odrl:hasPolicy cat:policy.Open_Description,
+                                       cat:policy.Normal_Closure_before_FOI_Act_30_years_from_1945-05-31 ] .
+
+
+
+cat:policy.Normal_Closure_before_FOI_Act_30_years_from_1945-05-31
+    rdf:type         odrl:Policy, odrl:Offer ;
+    rdfs:label       "Normal Closure before FOI Act: 30 years from 1945-05-31"^^xsd:string ;
+    odrl:inheritFrom cat:policy.Closed_or_Retained_Document ;
+    odrl:conflict    odrl:perm ;
+    odrl:profile     nat:odrl-profile ;
+    odrl:permission  [ rdf:type        odrl:Permission ;
+                       odrl:assigner   cat:The_National_Archives ;
+                       odrl:assignee   cat:The_Public ;
+                       odrl:action     odrl:readDocument ;
+                       odrl:constraint [ rdf:type         odrl:LogicalConstraint ;
+                                         odrl:andSequence ( [ rdf:type          odrl:Constraint ;
+                                                              odrl:leftOperand  odrl:dateTime ;
+                                                              odrl:operator     odrl:gt ;
+                                                              odrl:rightOperand "1945-05-31"^^xsd:date ]
+                                                            [ rdf:type odrl:Constraint ;
+                                                              odrl:leftOperand odrl:delayPeriod ;
+                                                              odrl:operator odrl:eq ;
+                                                              odrl:rightOperand "P30Y"^^xsd:duration ] ) ] ] .
+
+cat:policy.Closed_or_Retained_Document
+    rdf:type         odrl:Policy ;
+    rdfs:label       "Closed or Retained Document"^^xsd:string ;
+    odrl:conflict    odrl:perm ;
+    odrl:profile     nat:odrl-profile ;
+    odrl:inheritFrom cat:policy.Closure .
+
+cat:policy.Closure
+    rdf:type         odrl:Policy, odrl:Offer ;
+    rdfs:label       "Closure"^^xsd:string ;
+    odrl:conflict    odrl:perm ;
+    odrl:profile     nat:odrl-profile ;
+    odrl:prohibition [ rdf:type      odrl:Prohibition ;
+                       odrl:assigner cat:The_National_Archives ;
+                       odrl:assignee cat:The_Public ;
+                       odrl:action   odrl:read ] .
+
+cat:policy.Open_Description
+    rdf:type         odrl:Policy, odrl:Offer ;
+    rdfs:label       "Open Description"^^xsd:string ;
+    odrl:conflict    odrl:perm ;
+    odrl:profile     nat:odrl-profile ;
+    odrl:inheritFrom cat:policy.Closed_Description ;
+    odrl:permission  [ rdf:type      odrl:Permission ;
+                       odrl:assigner cat:The_National_Archives ;
+                       odrl:assignee cat:The_Public ;
+                       odrl:action   odrl:readDescription ] .
+
+cat:policy.Closed_Description
+    rdf:type         odrl:Policy ;
+    rdfs:label       "Closed Description"^^xsd:string ;
+    odrl:conflict    odrl:perm ;
+    odrl:profile     nat:odrl-profile ;
+    odrl:inheritFrom cat:policy.Closure .

@@ -1,0 +1,32 @@
+PREFIX : <http://cat.nationalarchives.gov.uk/>
+PREFIX cat: <http://cat.nationalarchives.gov.uk/>
+PREFIX odrl: <http://www.w3.org/ns/odrl/2/>
+PREFIX od: <http://purl.org/twc/vocab/opendap#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
+PREFIX nat: <http://www.nationalarchives.gov.uk/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+BASE <http://cat.nationalarchives.gov.uk/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT {
+          <test> odrl:constraint ?bnode .
+          ?bnode rdf:type odrl:Constraint ;
+                 odrl:leftOperand odrl:dateTime ;
+                 odrl:operator odrl:gt ;
+                 odrl:rightOperand ?openingDate .
+          }
+WHERE {
+          cat:policy.Normal_Closure_before_FOI_Act_30_years_from_1945-05-31 odrl:permission ?permission .
+          ?permission odrl:constraint ?constraint .
+          ?constraint odrl:andSequence ?seq .
+          ?seq rdf:first ?firstConstraint .
+          ?seq rdf:rest/rdf:first ?secondConstraint .
+          ?firstConstraint odrl:rightOperand ?lastDate .
+          ?secondConstraint  odrl:rightOperand ?duration .
+          BIND((?lastDate + ?duration) AS ?openingDate) .
+          BIND(BNODE() AS ?bnode)
+      }
